@@ -163,25 +163,29 @@ app.get("/freelancers/search/:name", async (req, res) => {
 
 app.get("/freelancers/stat", async (req, res) => {
   try {
-    let passedname = req.params.name.trim();
-
     let Obj = fs.readFileSync("./db.json", { encoding: "utf-8" });
     Obj = JSON.parse(Obj);
 
     let st = Obj.users.filter((item) => item.profession == "Student");
-    let wb = Obj.users.filter((item) => item.profession == "Student");
-    let ds = Obj.users.filter((item) => item.profession == "Student");
+    let wb = Obj.users.filter((item) => item.profession == "Web Developer");
+    let ds = Obj.users.filter((item) => item.profession == "Graphic Designer");
 
     let fi = Obj.users.filter((item) => item.isBooked);
 
     let fn = Obj.users.filter((item) => item.isBooked == false);
+    let avg = 0;
+    Obj.users.map((item) => {
+      avg += +item.hourly_rate;
+    });
+
+    avg = avg / Obj.users.length;
 
     let obj = {
       resgisterd: Obj.users.length,
       students: st.length,
       web_developers: wb.length,
       graphic_designers: ds.length,
-      avg_rate: 0,
+      avg_rate: avg,
       booked: fi.length,
       available: fn.length,
     };
