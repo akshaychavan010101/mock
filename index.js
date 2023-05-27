@@ -1,7 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
-const fs = require("fs");
+const fs = require('@cyclic.sh/s3fs') ;
 
 const app = express();
 
