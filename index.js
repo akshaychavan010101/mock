@@ -161,6 +161,39 @@ app.get("/freelancers/search/:name", async (req, res) => {
   }
 });
 
+app.get("/freelancers/stat", async (req, res) => {
+  try {
+    let passedname = req.params.name.trim();
+
+    let Obj = fs.readFileSync("./db.json", { encoding: "utf-8" });
+    Obj = JSON.parse(Obj);
+
+    let st = Obj.users.filter((item) => item.profession == "Student");
+    let wb = Obj.users.filter((item) => item.profession == "Student");
+    let ds = Obj.users.filter((item) => item.profession == "Student");
+
+    let fi = Obj.users.filter((item) => item.isBooked);
+
+    let fn = Obj.users.filter((item) => item.isBooked == false);
+
+    let obj = {
+      resgisterd: Obj.users.length,
+      students: st.length,
+      web_developers: wb.length,
+      graphic_designers: ds.length,
+      avg_rate: 0,
+      booked: fi.length,
+      available: fn.length,
+    };
+
+    fs.writeFileSync("./db.json", JSON.stringify(Obj));
+    res.json({ msg: "OK", data: obj });
+  } catch (error) {
+    console.log(error);
+    res.json({ msg: "Server error", error });
+  }
+});
+
 app.listen(4000, async () => {
   try {
     console.log(`Server is running at port ${4000}`);
